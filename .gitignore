@@ -1,0 +1,5 @@
+# Node.js
+servidor/node_modules/
+
+# Angular
+cliente/node_modules/
