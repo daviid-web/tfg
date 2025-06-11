@@ -1,0 +1,65 @@
+<app-admin-nav></app-admin-nav>
+
+<div class="p-4 overflow-x-auto">
+  <h2 class="text-2xl font-bold mb-4">Reportes de Anuncios</h2>
+
+  <table class="w-full border-collapse border border-gray-300 text-sm">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="p-2 border text-left">ID</th>
+        <th class="p-2 border text-left">Anuncio</th>
+        <th class="p-2 border text-left">Usuario</th>
+        <th class="p-2 border text-left">Motivo</th>
+        <th class="p-2 border text-left">Fecha</th>
+        <th class="p-2 border text-left">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let reporte of reportes" class="hover:bg-gray-50">
+        <td class="p-2 border">{{ reporte.id }}</td>
+
+        <td class="p-2 border">
+          <a
+            *ngIf="reporte.Anuncio"
+            [routerLink]="['/detalle', reporte.Anuncio.id]"
+            class="text-blue-600 hover:underline"
+          >
+            {{ reporte.Anuncio.titulo }}
+          </a>
+          <span *ngIf="!reporte.Anuncio" class="text-gray-400 italic">Anuncio eliminado</span>
+        </td>
+
+        <td class="p-2 border">
+          {{ reporte.Usuario?.nombre || 'Usuario eliminado' }}
+        </td>
+
+        <td class="p-2 border">{{ reporte.motivo }}</td>
+
+        <td class="p-2 border">{{ reporte.createdAt | date: 'short' }}</td>
+
+        <td class="p-2 border space-x-2">
+          <!-- Botón eliminar reporte -->
+          <button
+            class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
+            (click)="eliminarReporte(reporte.id)"
+          >
+            Eliminar reporte
+          </button>
+
+          <!-- Botón eliminar anuncio (solo si existe) -->
+          <button
+            *ngIf="reporte.Anuncio"
+            class="bg-orange-500 hover:bg-orange-600 text-white px-2 py-1 rounded text-xs"
+            (click)="eliminarAnuncio(reporte.Anuncio.id)"
+          >
+            Eliminar anuncio
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="reportes.length === 0" class="text-center text-gray-500 mt-4">
+    No hay reportes por mostrar.
+  </div>
+</div>

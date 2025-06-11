@@ -1,0 +1,16 @@
+<nav class="bg-gray-800 text-white shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="flex items-center space-x-6">
+      <a href="/admin/usuarios" class="hover:text-yellow-300 transition">Usuarios</a>
+      <a href="/admin/anuncios" class="hover:text-yellow-300 transition">Anuncios</a>
+      <a href="/admin/reportes" class="hover:text-yellow-300 transition">Reportes</a>
+    </div>
+
+    <button
+      (click)="logout()"
+      class="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded transition"
+    >
+      Cerrar sesión
+    </button>
+  </div>
+</nav>

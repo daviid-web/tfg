@@ -1,0 +1,107 @@
+<app-nav></app-nav>
+
+<div class="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8 mt-16">
+  <div class="max-w-6xl mx-auto">
+    <!-- Título de la sección -->
+    <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-10 text-center relative pb-4">
+      Mis Vehículos Favoritos
+      <span class="block w-24 h-1 bg-blue-600 mx-auto mt-4 rounded-full"></span>
+    </h1>
+
+    <!-- Estados de Carga, Error y Vacío -->
+    <div *ngIf="cargando" class="flex flex-col items-center justify-center py-20 text-blue-600 text-2xl font-semibold animate-pulse">
+      <svg class="animate-spin h-12 w-12 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <p class="mt-4">Cargando tus vehículos favoritos...</p>
+    </div>
+
+    <div *ngIf="!cargando && error" class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg shadow-md mb-8 flex items-center">
+      <svg class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>{{ error }}</span>
+    </div>
+
+    <div *ngIf="!cargando && !error && favoritos.length === 0"
+      class="bg-blue-100 border border-blue-400 text-blue-700 px-6 py-4 rounded-lg shadow-md mb-8 flex flex-col items-center text-center">
+      <svg class="h-12 w-12 text-blue-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+      </svg>
+      <p class="text-xl font-semibold mb-3">¡Aún no tienes vehículos guardados!</p>
+      <p class="text-gray-700">Explora nuestra amplia selección de vehículos y guarda los que te interesen para verlos más tarde.</p>
+      <a routerLink="/anuncios"
+        class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 shadow-lg transform hover:scale-105 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        Explorar Anuncios
+      </a>
+    </div>
+
+    <!-- Lista de Favoritos -->
+    <div *ngIf="!cargando && favoritos.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div *ngFor="let favorito of favoritos" class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 transform transition duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+           (click)="verDetalle(favorito.anuncio.id)">
+        <div class="relative">
+          <img *ngIf="favorito.anuncio.imagen_principal" [src]="formatearUrlImagen(favorito.anuncio.imagen_principal)"
+            [alt]="'Imagen de ' + favorito.anuncio.titulo" class="w-full h-56 object-cover" (error)="handleImageError($event)" />
+          <div *ngIf="!favorito.anuncio.imagen_principal" class="w-full h-56 bg-gray-200 flex items-center justify-center text-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L19 16m-2-2l1.586-1.586a2 2 0 012.828 0L22 13.414V16a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v2" />
+            </svg>
+          </div>
+
+          <div class="absolute bottom-4 left-4 bg-blue-700 text-white px-4 py-2 rounded-full text-xl font-bold shadow-md">
+            {{ formatearPrecio(favorito.anuncio.precio) }}
+          </div>
+        </div>
+
+        <div class="p-6">
+          <h3 class="text-2xl font-bold text-gray-800 mb-3 truncate">{{ favorito.anuncio.titulo }}</h3>
+
+          <div class="grid grid-cols-2 gap-y-3 text-base text-gray-700 mb-4">
+            <span class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-2" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Año: <strong class="ml-1">{{ favorito.anuncio.anio }}</strong>
+            </span>
+            <span class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-2" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Combustible: <strong class="ml-1">{{ favorito.anuncio.combustible | titlecase }}</strong>
+            </span>
+            <span class="flex items-center col-span-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-2" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              </svg>
+              Kilómetros: <strong class="ml-1">{{ favorito.anuncio.kilometros | number:'1.0-0' }} km</strong>
+            </span>
+          </div>
+
+          <div class="text-sm text-gray-500 mb-5 border-t border-gray-100 pt-4 flex justify-between items-center">
+            <span>Añadido el {{ formatearFecha(favorito.fecha_agregado) }}</span>
+            <button (click)="$event.stopPropagation(); eliminarFavorito(favorito.id)"
+              class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-full transition duration-300 text-sm font-semibold shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

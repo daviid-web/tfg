@@ -1,0 +1,44 @@
+<app-admin-nav></app-admin-nav>
+
+<div class="p-6">
+  <h2 class="text-2xl font-bold mb-4">Panel de administración de anuncios</h2>
+
+  <div *ngIf="cargando()" class="text-gray-600 mb-4">Cargando anuncios...</div>
+  <div *ngIf="error()" class="text-red-500">{{ error() }}</div>
+
+  <div *ngIf="!cargando() && anuncios().length === 0" class="text-gray-500">No hay anuncios disponibles.</div>
+
+  <div class="overflow-x-auto" *ngIf="!cargando() && anuncios().length > 0">
+    <table class="min-w-full text-sm text-left text-gray-700 border">
+      <thead class="text-xs uppercase bg-gray-100 text-gray-700">
+        <tr>
+          <th class="px-4 py-2">ID</th>
+          <th class="px-4 py-2">Título</th>
+          <th class="px-4 py-2">Precio</th>
+          <th class="px-4 py-2">Estado</th>
+          <th class="px-4 py-2">Vendedor ID</th>
+          <th class="px-4 py-2">Matrícula</th>
+          <th class="px-4 py-2 text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let anuncio of anuncios()" class="border-b hover:bg-gray-50">
+          <td class="px-4 py-2">{{ anuncio.id }}</td>
+          <td class="px-4 py-2">{{ anuncio.titulo }}</td>
+          <td class="px-4 py-2">€{{ anuncio.precio }}</td>
+          <td class="px-4 py-2 capitalize">{{ anuncio.estado }}</td>
+          <td class="px-4 py-2">{{ anuncio.vendedor_id }}</td>
+          <td class="px-4 py-2">{{ anuncio.matricula }}</td>
+          <td class="px-4 py-2 text-center">
+            <button
+              class="text-sm text-white bg-red-600 hover:bg-red-700 px-3 py-1 rounded"
+              (click)="eliminarAnuncio(anuncio.id)"
+            >
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
