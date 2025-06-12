@@ -68,3 +68,6 @@ sequelize.authenticate()
   .catch(err => console.error('Error al conectar con la base de datos:', err));
 
 require('./model/Relaciones');
+
+
+module.exports = app;

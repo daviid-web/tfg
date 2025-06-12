@@ -1,0 +1,51 @@
+# artillery_login_test.yml
+
+# La sección 'config' define la configuración global de la prueba de carga
+config:
+  # 'target' es la URL base de tu servidor Express.
+  # ¡ASEGÚRATE de que esta URL y puerto sean correctos para tu servidor en ejecución!
+  target: "http://192.168.2.2:3000"
+
+  # 'phases' define cómo se generará la carga a lo largo del tiempo.
+  # Puedes tener múltiples fases para simular diferentes patrones de carga.
+  phases:
+    - # Fase 1: Calentamiento (rampa gradual de usuarios)
+      duration: 20  # Duración de esta fase en segundos
+      arrivalRate: 5 # Tasa de llegada: 5 usuarios virtuales por segundo
+      name: "Fase de Calentamiento" # Nombre de esta fase
+
+    - # Fase 2: Carga sostenida (carga máxima constante)
+      duration: 60  # Duración de esta fase en segundos
+      arrivalRate: 10 # 10 usuarios virtuales por segundo
+      name: "Fase de Carga Sostenida"
+
+  # 'defaults' puedes definir cabeceras comunes para todas las solicitudes
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+# La sección 'scenarios' describe el comportamiento de tus usuarios virtuales.
+# Cada escenario es un "flujo" de acciones que un usuario realiza.
+scenarios:
+  - name: "Login de Usuario" # Nombre descriptivo del escenario
+    flow:
+      - # Una solicitud POST a la ruta de login
+        post:
+          url: "/api/sesion/login" # La ruta completa relativa al 'target'
+          json: # El cuerpo de la solicitud en formato JSON
+            # ¡IMPORTANTE! Usa credenciales válidas que existan en tu base de datos
+            # O mockea tu DB para que estas credenciales sean válidas en el entorno de prueba.
+            correo: "test@test.com"
+            password: "test1234"
+
+          # Opcional: Validaciones de respuesta.
+          # Puedes verificar si la respuesta tiene un código de estado específico.
+          # También puedes verificar si el cuerpo de la respuesta contiene ciertas propiedades,
+          # pero para simplificar, nos enfocamos en el status.
+          capture:
+            - json: "$.token" # Captura el token si existe (útil si necesitas usarlo en peticiones subsiguientes)
+              as: "authToken"
+          expect:
+            - statusCode: 200 # Esperamos un código de estado 200 para un login exitoso
+            - contentType: json # Esperamos que la respuesta sea JSON
+

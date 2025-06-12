@@ -185,7 +185,3 @@ INSERT INTO Modelo (nombre, marca_id, createdAt, updatedAt) VALUES
 
 
 -- admin@admin.com admin1234
-
--- test@test.com test1234
-
--- david@gmail.com david1234
