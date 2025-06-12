@@ -13,7 +13,7 @@ INSERT INTO Marcas (nombre, pais, createdAt, updatedAt) VALUES
 ('Kia', 'Corea del Sur', NOW(), NOW()),
 ('Renault', 'Francia', NOW(), NOW()),
 ('Peugeot', 'Francia', NOW(), NOW()),
-('Citroën', 'Francia', NOW(), NOW()),
+('Citroen', 'Francia', NOW(), NOW()),
 ('Seat', 'España', NOW(), NOW()),
 ('Fiat', 'Italia', NOW(), NOW()),
 ('Mazda', 'Japón', NOW(), NOW()),
