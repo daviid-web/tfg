@@ -15,7 +15,7 @@ const Reporte = sequelize.define('Reporte', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Usuarios',
+            model: 'Usuario',
             key: 'id',
         },
     },
@@ -23,7 +23,7 @@ const Reporte = sequelize.define('Reporte', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Anuncios',
+            model: 'Anuncio',
             key: 'id',
         },
     },
