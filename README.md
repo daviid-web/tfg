@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# tfg
-=======
 🚗 FastCarTrade - Guía de Inicio Rápido
 
 Este repositorio contiene el código de FastCarTrade, una aplicación web para compraventa de vehículos.
@@ -59,4 +56,3 @@ http://192.168.2.3:4200
 ✅ Verificación
 
 Si ves la página de FastCarTrade cargada en tu navegador, ¡el despliegue fue exitoso! 🚀
->>>>>>> 69ec168 (version final de FastCarTrade)
